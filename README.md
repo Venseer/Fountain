@@ -11,6 +11,9 @@ If you would like to run Fountain on Mac OSX or Linux, download the windows bina
 # Known Issues/To Do List
 
 * Add existing map underlay/overlay to make tracing easier.
+* Add composite map system for people interested in making enormous maps comprised of multiple renders. (Currently in progress)
+* Add document merging (so you can store all your favourite brushes, effects, gradients, etc. in a document ready for use in your next project).
+* Add clipboard copying for gradients.
 
 # Forkers!
 Hey guys; if you're forking this repo then you'll be happy to know that I'm including the DLL dependencies in the project now. They're located in 'Fountain/bin/Release'.
