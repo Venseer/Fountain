@@ -489,7 +489,7 @@ namespace Fountain.Forms
 		//Generators
 		private void newGeneratorToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			TextEntryDialog ted = new TextEntryDialog("Dialog Name");
+			TextEntryDialog ted = new TextEntryDialog("Generator Name");
 			if (ted.ShowDialog() == DialogResult.OK)
 			{
 				if (!Document.ContainsGenerator(ted.Entry))
