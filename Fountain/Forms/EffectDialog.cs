@@ -34,39 +34,78 @@ namespace Fountain.Forms
 {
 	public partial class EffectDialog : Form
 	{
-		private string effectName;
+		public string EffectName
+		{
+			get
+			{
+				return (string)effectNameBox.SelectedItem;
+			}
+			set
+			{
+				RefreshNameList();
+				effectNameBox.SelectedItem = value;
+				RefreshInfo();
+			}
+		}
 		private CSScript script;
 
-		public EffectDialog(string effectName, Form owner)
+		public EffectDialog(Form owner)
 		{
 			Owner = owner;
-			if (effectName != null && effectName.Length > 0)
+			CenterToParent();
+			InitializeComponent();
+
+			RefreshInfo();
+			RefreshNameList();
+
+			Document.EffectSet += Document_EffectSet;
+			Document.EffectRemoved += Document_EffectRemoved;
+			Document.Loaded += Document_Loaded;
+			Document.Cleared += Document_Cleared;
+		}
+
+		private void RefreshNameList()
+		{
+			effectNameBox.Items.Clear();
+			foreach (string name in Document.EffectNames)
+				effectNameBox.Items.Add(name);
+		}
+		private void RefreshInfo()
+		{
+			if (Document.ContainsEffect(EffectName))
 			{
-				InitializeComponent();
-
-				if (Document.ContainsEffect(this.effectName = effectName))
-				{
-					script = Document.GetEffectScript(effectName);
-				}
-				else
-				{
-					Document.SetEffect(effectName, null);
-					script = Document.GetEffectScript(effectName);
-				}
-
-				Text = "Effect - " + effectName;
+				//Fields
+				script = Document.GetEffectScript(EffectName);
+				//Control Values
+				Text = "Effect - " + EffectName;
 				scriptBox.Text = script.Source;
-
-				Document.Cleared += Document_Cleared;
-				Document.Loaded += Document_Loaded;
-				Document.EffectRemoved += Document_EffectRemoved;
+				//Enable Controls
+				deleteButton.Enabled = true;
+				scriptBox.Enabled = true;
+				compileButton.Enabled = true;
 			}
-			else throw new Exception("The supplied name was empty or null.");
+			else
+			{
+				//Fields
+				script = null;
+				//Control Values
+				Text = "Effects";
+				scriptBox.Text = null;
+				//Disable Controls
+				deleteButton.Enabled = false;
+				scriptBox.Enabled = false;
+				compileButton.Enabled = false;
+			}
 		}
 
 		private void Document_EffectRemoved(string name, Media.HeightRender.Effect effect)
 		{
-			if (name == effectName) Close();
+			RefreshNameList();
+			RefreshInfo();
+		}
+		private void Document_EffectSet(string name, HeightRender.Effect effect)
+		{
+			EffectName = name;
 		}
 		private void Document_Loaded(string path)
 		{
@@ -94,7 +133,7 @@ namespace Fountain.Forms
 					MessageBox.Show("There was a compilation error in your script:\r\n" + errors, "Script Error");
 					break;
 				case HeightRender.EffectCompileResult.Success:
-					Document.SetEffect(effectName, effect, script);
+					Document.SetEffect(EffectName, effect, script);
 					break;
 			}
 		}
@@ -107,6 +146,33 @@ namespace Fountain.Forms
 
 				e.SuppressKeyPress = true;
 			}
+		}
+		private void scriptBox_TextChanged(object sender, EventArgs e)
+		{
+			if (script != null)
+				script.Source = scriptBox.Text;
+		}
+		private void deleteButton_Click(object sender, EventArgs e)
+		{
+			if (MessageBox.Show("Are you sure you want to delete this effect?", "Delete Effect", MessageBoxButtons.OKCancel) == DialogResult.OK)
+				Document.RemoveEffect(EffectName);
+		}
+		private void EffectDialog_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			if (e.CloseReason == CloseReason.UserClosing)
+			{
+				e.Cancel = true;
+				Hide();
+			}
+		}
+		private void effectNameBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			RefreshInfo();
+		}
+		private void addButton_Click(object sender, EventArgs e)
+		{
+			if (Document.ContainsEffect(EffectName))
+				Document.SelectEffect(EffectName);
 		}
 	}
 }

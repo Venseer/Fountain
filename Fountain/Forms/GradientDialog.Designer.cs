@@ -187,7 +187,6 @@
 			// 
 			// gradientBox
 			// 
-			this.gradientBox.BackgroundImage = global::Fountain.Properties.Resources.tile;
 			this.gradientBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.gradientBox.Gradient = null;
 			this.gradientBox.Location = new System.Drawing.Point(14, 30);

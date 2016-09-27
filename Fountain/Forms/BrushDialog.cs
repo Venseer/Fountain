@@ -34,99 +34,157 @@ namespace Fountain.Forms
 {
 	public partial class BrushDialog : Form
 	{
-		private string brushName;
+		public string BrushName
+		{
+			get
+			{
+				return (string)brushNameBox.SelectedItem;
+			}
+			set
+			{
+				RefreshNameList();
+				brushNameBox.SelectedItem = value;
+				RefreshInfo();
+			}
+		}
 		private HeightBrush brush;
 		private CSScript script;
 
-		public BrushDialog(string brushName, Form owner)
+		public BrushDialog(Form owner)
 		{
 			Owner = owner;
-			if (brushName != null && brushName.Length > 0)
+			CenterToParent();
+			InitializeComponent();
+
+			RefreshInfo();
+			RefreshNameList();
+
+			Document.BrushSet += Document_BrushSet;
+			Document.BrushRemoved += Document_BrushRemoved;
+			Document.Loaded += Document_Loaded;
+			Document.Cleared += Document_Cleared;
+		}
+
+		private void RefreshNameList()
+		{
+			brushNameBox.Items.Clear();
+			foreach (string name in Document.BrushNames)
+				brushNameBox.Items.Add(name);
+		}
+		private void RefreshInfo()
+		{
+			if (Document.ContainsBrush(BrushName))
 			{
-				CenterToParent();
-				InitializeComponent();
-
-				if (Document.ContainsBrush(this.brushName = brushName))
-				{
-					brush = Document.GetBrush(brushName);
-					script = Document.GetBrushScript(brushName);
-				}
-				else
-				{
-					Document.SetBrush(brushName, brush = new HeightBrush(64, 64, 1.0f, 8));
-					script = Document.GetBrushScript(brushName);
-				}
-
-				Text = "Brush - " + brushName;
+				//Fields
+				brush = Document.GetBrush(BrushName);
+				script = Document.GetBrushScript(BrushName);
+				//Control Values
+				Text = "Brush - " + BrushName;
 				widthBox.Value = brush.Width;
 				heightBox.Value = brush.Height;
 				powerBox.Value = (decimal)brush.Power;
 				precisionBox.Value = brush.Precision;
 				scriptBox.Text = script.Source;
-
-				Document.BrushRemoved += FountainDocument_BrushRemoved;
-				Document.Loaded += FountainDocument_Loaded;
-				Document.Cleared += FountainDocument_Cleared;
+				//Enable Controls
+				deleteButton.Enabled = true;
+				widthBox.Enabled = true;
+				heightBox.Enabled = true;
+				powerBox.Enabled = true;
+				precisionBox.Enabled = true;
+				scriptBox.Enabled = true;
+				compileButton.Enabled = true;
 			}
-			else throw new Exception("The supplied name was empty or null.");
+			else
+			{
+				//Fields
+				brush = null;
+				script = null;
+				//Control Values
+				Text = "Brushes";
+				widthBox.Value = 0;
+				heightBox.Value = 0;
+				powerBox.Value = 1;
+				precisionBox.Value = 1;
+				scriptBox.Text = null;
+				//Disable Controls
+				deleteButton.Enabled = false;
+				widthBox.Enabled = false;
+				heightBox.Enabled = false;
+				powerBox.Enabled = false;
+				precisionBox.Enabled = false;
+				scriptBox.Enabled = false;
+				compileButton.Enabled = false;
+			}
 		}
 
-		private void FountainDocument_Cleared()
+		private void Document_Cleared()
 		{
 			Close();
 		}
-		private void FountainDocument_Loaded(string path)
+		private void Document_Loaded(string path)
 		{
 			Close();
 		}
-		private void FountainDocument_BrushRemoved(string name, HeightBrush brush)
+		private void Document_BrushRemoved(string name, HeightBrush brush)
 		{
-			if (name == brushName) Close();
+			RefreshNameList();
+			RefreshInfo();
+		}
+		private void Document_BrushSet(string name, HeightBrush brush)
+		{
+			BrushName = name;
 		}
 
 		private void widthBox_ValueChanged(object sender, EventArgs e)
 		{
-			brush.Width = (int)widthBox.Value;
+			if (brush != null)
+				brush.Width = (int)widthBox.Value;
 		}
 		private void heightBox_ValueChanged(object sender, EventArgs e)
 		{
-			brush.Height = (int)heightBox.Value;
+			if (brush != null)
+				brush.Height = (int)heightBox.Value;
 		}
 		private void powerBox_ValueChanged(object sender, EventArgs e)
 		{
-			brush.Power = (float)powerBox.Value;
+			if (brush != null)
+				brush.Power = (float)powerBox.Value;
 		}
 		private void precisionBox_ValueChanged(object sender, EventArgs e)
 		{
-			brush.Precision = (int)precisionBox.Value;
+			if (brush != null)
+				brush.Precision = (int)precisionBox.Value;
 		}
 		private void compileButton_Click(object sender, EventArgs e)
 		{
-			script.Source = scriptBox.Text;
-			HeightBrush.SampleFunction sample;
-			HeightBrush.BlendFunction blend;
-			string errors;
-			switch (HeightBrush.CompileFunctions(script, out sample, out blend, out errors))
+			if (script != null)
 			{
-				case HeightBrush.CompileResult.WrongSampleSignature:
-					MessageBox.Show("The method signature for the \"Sample\" function should be:\n\nfloat Sample(int x, int y, float intensity, int left, int right, int top int bottom)", "Script Error");
-					break;
-				case HeightBrush.CompileResult.MissingSampleFunction:
-					MessageBox.Show("The \"Sample\" function is missing from your script.");
-					break;
-				case HeightBrush.CompileResult.WrongBlendSignature:
-					MessageBox.Show("The method signature for the \"Blend\" function should be:\n\nfloat Blend(float baseValue, float newValue)", "Script Error");
-					break;
-				case HeightBrush.CompileResult.MissingBlendFunction:
-					MessageBox.Show("The \"Blend\" function is missing from your script.");
-					break;
-				case HeightBrush.CompileResult.SyntaxError:
-					MessageBox.Show("There was a compilation error in your script:\r\n" + errors, "Syntax Error");
-					break;
-				case HeightBrush.CompileResult.Success:
-					brush.Sample = sample;
-					brush.Blend = blend;
-					break;
+				script.Source = scriptBox.Text;
+				HeightBrush.SampleFunction sample;
+				HeightBrush.BlendFunction blend;
+				string errors;
+				switch (HeightBrush.CompileFunctions(script, out sample, out blend, out errors))
+				{
+					case HeightBrush.CompileResult.WrongSampleSignature:
+						MessageBox.Show("The method signature for the \"Sample\" function should be:\n\nfloat Sample(int x, int y, float intensity, int left, int right, int top int bottom)", "Script Error");
+						break;
+					case HeightBrush.CompileResult.MissingSampleFunction:
+						MessageBox.Show("The \"Sample\" function is missing from your script.");
+						break;
+					case HeightBrush.CompileResult.WrongBlendSignature:
+						MessageBox.Show("The method signature for the \"Blend\" function should be:\n\nfloat Blend(float baseValue, float newValue)", "Script Error");
+						break;
+					case HeightBrush.CompileResult.MissingBlendFunction:
+						MessageBox.Show("The \"Blend\" function is missing from your script.");
+						break;
+					case HeightBrush.CompileResult.SyntaxError:
+						MessageBox.Show("There was a compilation error in your script:\r\n" + errors, "Syntax Error");
+						break;
+					case HeightBrush.CompileResult.Success:
+						brush.Sample = sample;
+						brush.Blend = blend;
+						break;
+				}
 			}
 		}
 		private void scriptBox_KeyDown(object sender, KeyEventArgs e)
@@ -137,6 +195,28 @@ namespace Fountain.Forms
 				scriptBox.SelectionLength = scriptBox.Text.Length;
 
 				e.SuppressKeyPress = true;
+			}
+		}
+		private void scriptBox_TextChanged(object sender, EventArgs e)
+		{
+			if (script != null)
+				script.Source = scriptBox.Text;
+		}
+		private void deleteButton_Click(object sender, EventArgs e)
+		{
+			if (MessageBox.Show("Are you sure you want to delete this brush?", "Delete Brush", MessageBoxButtons.OKCancel) == DialogResult.OK)
+				Document.RemoveBrush(BrushName);
+		}
+		private void brushNameBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			RefreshInfo();
+		}
+		private void BrushDialog_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			if (e.CloseReason == CloseReason.UserClosing)
+			{
+				e.Cancel = true;
+				Hide();
 			}
 		}
 	}

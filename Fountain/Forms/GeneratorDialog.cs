@@ -34,39 +34,78 @@ namespace Fountain.Forms
 {
 	public partial class GeneratorDialog : Form
 	{
-		private string generatorName;
+		public string GeneratorName
+		{
+			get
+			{
+				return (string)generatorNameBox.SelectedItem;
+			}
+			set
+			{
+				RefreshNameList();
+				generatorNameBox.SelectedItem = value;
+				RefreshInfo();
+			}
+		}
 		private CSScript script;
 
-		public GeneratorDialog(string generatorName, Form owner)
+		public GeneratorDialog(Form owner)
 		{
 			Owner = owner;
-			if (generatorName != null && generatorName.Length > 0)
-			{
-				InitializeComponent();
+			CenterToParent();
+			InitializeComponent();
 
-				if (Document.ContainsGenerator(this.generatorName = generatorName))
-				{
-					script = Document.GetGeneratorScript(generatorName);
-				}
-				else
-				{
-					Document.SetGenerator(generatorName, null);
-					script = Document.GetGeneratorScript(generatorName);
-				}
+			RefreshInfo();
+			RefreshNameList();
 
-				Text = "Generator - " + generatorName;
-				scriptBox.Text = script.Source;
-
-				Document.Cleared += Document_Cleared;
-				Document.Loaded += Document_Loaded;
-				Document.GeneratorRemoved += Document_GeneratorRemoved;
-			}
-			else throw new Exception("The supplied name was empty or null.");
+			Document.GeneratorSet += Document_GeneratorSet;
+			Document.GeneratorRemoved += Document_GeneratorRemoved;
+			Document.Loaded += Document_Loaded;
+			Document.Cleared += Document_Cleared;
 		}
 
+		private void RefreshNameList()
+		{
+			generatorNameBox.Items.Clear();
+			foreach (string name in Document.GeneratorNames)
+				generatorNameBox.Items.Add(name);
+		}
+		private void RefreshInfo()
+		{
+			if (Document.ContainsGenerator(GeneratorName))
+			{
+				//Fields
+				script = Document.GetGeneratorScript(GeneratorName);
+				//Control Values
+				Text = "Generator - " + GeneratorName;
+				scriptBox.Text = script.Source;
+				//Enable Controls
+				deleteButton.Enabled = true;
+				scriptBox.Enabled = true;
+				compileButton.Enabled = true;
+			}
+			else
+			{
+				//Fields
+				script = null;
+				//Control Values
+				Text = "Generators";
+				scriptBox.Text = null;
+				//Disable Controls
+				deleteButton.Enabled = false;
+				scriptBox.Enabled = false;
+				compileButton.Enabled = false;
+			}
+		}
+
+		private void Document_GeneratorSet(string name, HeightRender.Generator generator)
+		{
+			GeneratorName = name;
+		}
 		private void Document_GeneratorRemoved(string name, HeightRender.Generator generator)
 		{
-			if (name == generatorName) Close();
+			RefreshNameList();
+			RefreshInfo();
 		}
 		private void Document_Loaded(string path)
 		{
@@ -94,7 +133,7 @@ namespace Fountain.Forms
 					MessageBox.Show("There was a compilation error in your script:\r\n" + errors, "Script Error");
 					break;
 				case HeightRender.GeneratorCompileResult.Success:
-					Document.SetGenerator(generatorName, generator, script);
+					Document.SetGenerator(GeneratorName, generator, script);
 					break;
 			}
 		}
@@ -106,6 +145,28 @@ namespace Fountain.Forms
 				scriptBox.SelectionLength = scriptBox.Text.Length;
 
 				e.SuppressKeyPress = true;
+			}
+		}
+		private void scriptBox_TextChanged(object sender, EventArgs e)
+		{
+			if (script != null)
+				script.Source = scriptBox.Text;
+		}
+		private void deleteButton_Click(object sender, EventArgs e)
+		{
+			if (MessageBox.Show("Are you sure you want to delete this generator?", "Delete Generator", MessageBoxButtons.OKCancel) == DialogResult.OK)
+				Document.RemoveGenerator(GeneratorName);
+		}
+		private void generatorNameBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			RefreshInfo();
+		}
+		private void GeneratorDialog_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			if (e.CloseReason == CloseReason.UserClosing)
+			{
+				e.Cancel = true;
+				Hide();
 			}
 		}
 	}

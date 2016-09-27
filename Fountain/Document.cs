@@ -59,7 +59,7 @@ namespace Fountain
 		}
 		public static bool ContainsRender(string name)
 		{
-			return renders.ContainsKey(name);
+			return name != null && renders.ContainsKey(name);
 		}
 		//Setting
 		public static bool SetRender(string name, HeightRender render)
@@ -173,7 +173,7 @@ namespace Fountain
 		}
 		public static bool ContainsGradient(string name)
 		{
-			return gradients.ContainsKey(name);
+			return name != null && gradients.ContainsKey(name);
 		}
 		//Setting
 		public static bool SetGradient(string name, PhotonGradient gradient)
@@ -293,7 +293,7 @@ namespace Fountain
 		}
 		public static bool ContainsEffect(string name)
 		{
-			return effects.ContainsKey(name);
+			return name != null && effects.ContainsKey(name);
 		}
 		//Setting
 		public static bool SetEffect(string name, HeightRender.Effect effect, CSScript script = null)
@@ -462,7 +462,7 @@ namespace Fountain
 		}
 		public static bool ContainsBrush(string name)
 		{
-			return brushes.ContainsKey(name);
+			return name != null && brushes.ContainsKey(name);
 		}
 		//Setting
 		public static bool SetBrush(string name, HeightBrush brush, CSScript script = null)
@@ -631,7 +631,7 @@ namespace Fountain
 		}
 		public static bool ContainsGenerator(string name)
 		{
-			return generators.ContainsKey(name);
+			return name != null && generators.ContainsKey(name);
 		}
 		//Setting
 		public static bool SetGenerator(string name, HeightRender.Generator generator, CSScript script = null)
