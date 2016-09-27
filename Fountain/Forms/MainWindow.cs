@@ -318,6 +318,24 @@ namespace Fountain.Forms
 			lastPointOnRenderArea = pointOnRenderArea;
 			lastPointOnRender = pointOnRender;
 		}
+		private void exportRenderToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (Document.SelectedRender != null)
+			{
+				saveFileDialog.Filter = "Portable Network Graphics (*.png)|*.png";
+				if (saveFileDialog.ShowDialog() == DialogResult.OK)
+				{
+					try
+					{
+						Document.SelectedRender.Bitmap.Save(saveFileDialog.FileName);
+					}
+					catch
+					{
+						MessageBox.Show("There was an issue saving the image to the given filepath.", "Export Error");
+					}
+				}
+			}
+		}
 		//Document
 		private void newDocumentToolStripMenuItem_Click(object sender, EventArgs e)
 		{

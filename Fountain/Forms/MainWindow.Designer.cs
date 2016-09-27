@@ -41,6 +41,7 @@
 			this.rendersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.newRenderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.editRenderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.exportRenderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.gradientsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.newGradientToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.editGradientToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,11 +54,15 @@
 			this.generatorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.newGeneratorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.editGeneratorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.runGeneratorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.generatorListBox = new System.Windows.Forms.ToolStripComboBox();
+			this.executeGeneratorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.selectedEffectList = new System.Windows.Forms.ListBox();
 			this.rightBrushNameBox = new System.Windows.Forms.ComboBox();
 			this.leftBrushNameBox = new System.Windows.Forms.ComboBox();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+			this.renderArea = new Fountain.Controls.RenderArea();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.selectedGradientBox = new System.Windows.Forms.ComboBox();
@@ -67,10 +72,6 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
 			this.selectedRenderBox = new System.Windows.Forms.ComboBox();
-			this.renderArea = new Fountain.Controls.RenderArea();
-			this.runGeneratorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.generatorListBox = new System.Windows.Forms.ToolStripComboBox();
-			this.executeGeneratorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
@@ -147,7 +148,8 @@
 			// 
 			this.rendersToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newRenderToolStripMenuItem,
-            this.editRenderToolStripMenuItem});
+            this.editRenderToolStripMenuItem,
+            this.exportRenderToolStripMenuItem});
 			this.rendersToolStripMenuItem.Name = "rendersToolStripMenuItem";
 			this.rendersToolStripMenuItem.Size = new System.Drawing.Size(75, 20);
 			this.rendersToolStripMenuItem.Text = "Renders";
@@ -166,6 +168,13 @@
 			this.editRenderToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
 			this.editRenderToolStripMenuItem.Text = "Edit";
 			this.editRenderToolStripMenuItem.Click += new System.EventHandler(this.editRenderToolStripMenuItem_Click);
+			// 
+			// exportRenderToolStripMenuItem
+			// 
+			this.exportRenderToolStripMenuItem.Name = "exportRenderToolStripMenuItem";
+			this.exportRenderToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+			this.exportRenderToolStripMenuItem.Text = "Export";
+			this.exportRenderToolStripMenuItem.Click += new System.EventHandler(this.exportRenderToolStripMenuItem_Click);
 			// 
 			// gradientsToolStripMenuItem
 			// 
@@ -252,16 +261,40 @@
 			// newGeneratorToolStripMenuItem
 			// 
 			this.newGeneratorToolStripMenuItem.Name = "newGeneratorToolStripMenuItem";
-			this.newGeneratorToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.newGeneratorToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
 			this.newGeneratorToolStripMenuItem.Text = "New";
 			this.newGeneratorToolStripMenuItem.Click += new System.EventHandler(this.newGeneratorToolStripMenuItem_Click);
 			// 
 			// editGeneratorToolStripMenuItem
 			// 
 			this.editGeneratorToolStripMenuItem.Name = "editGeneratorToolStripMenuItem";
-			this.editGeneratorToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.editGeneratorToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
 			this.editGeneratorToolStripMenuItem.Text = "Edit";
 			this.editGeneratorToolStripMenuItem.Click += new System.EventHandler(this.editGeneratorToolStripMenuItem_Click);
+			// 
+			// runGeneratorToolStripMenuItem
+			// 
+			this.runGeneratorToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.generatorListBox,
+            this.executeGeneratorToolStripMenuItem});
+			this.runGeneratorToolStripMenuItem.Name = "runGeneratorToolStripMenuItem";
+			this.runGeneratorToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+			this.runGeneratorToolStripMenuItem.Text = "Run...";
+			// 
+			// generatorListBox
+			// 
+			this.generatorListBox.BackColor = System.Drawing.SystemColors.ControlLight;
+			this.generatorListBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.generatorListBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.generatorListBox.Name = "generatorListBox";
+			this.generatorListBox.Size = new System.Drawing.Size(121, 23);
+			// 
+			// executeGeneratorToolStripMenuItem
+			// 
+			this.executeGeneratorToolStripMenuItem.Name = "executeGeneratorToolStripMenuItem";
+			this.executeGeneratorToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+			this.executeGeneratorToolStripMenuItem.Text = "Execute";
+			this.executeGeneratorToolStripMenuItem.Click += new System.EventHandler(this.executeGeneratorToolStripMenuItem_Click);
 			// 
 			// selectedEffectList
 			// 
@@ -323,6 +356,19 @@
 			this.splitContainer1.Size = new System.Drawing.Size(1012, 483);
 			this.splitContainer1.SplitterDistance = 816;
 			this.splitContainer1.TabIndex = 3;
+			// 
+			// renderArea
+			// 
+			this.renderArea.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("renderArea.BackgroundImage")));
+			this.renderArea.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.renderArea.Image = null;
+			this.renderArea.Location = new System.Drawing.Point(0, 0);
+			this.renderArea.Name = "renderArea";
+			this.renderArea.OverlayThickness = 1F;
+			this.renderArea.Size = new System.Drawing.Size(816, 483);
+			this.renderArea.TabIndex = 0;
+			this.renderArea.KeyDown += new System.Windows.Forms.KeyEventHandler(this.renderArea_KeyDown);
+			this.renderArea.KeyUp += new System.Windows.Forms.KeyEventHandler(this.renderArea_KeyUp);
 			// 
 			// groupBox2
 			// 
@@ -425,43 +471,6 @@
 			this.selectedRenderBox.TabIndex = 0;
 			this.selectedRenderBox.SelectedIndexChanged += new System.EventHandler(this.selectedRenderBox_SelectedIndexChanged);
 			// 
-			// renderArea
-			// 
-			this.renderArea.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("renderArea.BackgroundImage")));
-			this.renderArea.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.renderArea.Image = null;
-			this.renderArea.Location = new System.Drawing.Point(0, 0);
-			this.renderArea.Name = "renderArea";
-			this.renderArea.OverlayThickness = 1F;
-			this.renderArea.Size = new System.Drawing.Size(816, 483);
-			this.renderArea.TabIndex = 0;
-			this.renderArea.KeyDown += new System.Windows.Forms.KeyEventHandler(this.renderArea_KeyDown);
-			this.renderArea.KeyUp += new System.Windows.Forms.KeyEventHandler(this.renderArea_KeyUp);
-			// 
-			// runGeneratorToolStripMenuItem
-			// 
-			this.runGeneratorToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.generatorListBox,
-            this.executeGeneratorToolStripMenuItem});
-			this.runGeneratorToolStripMenuItem.Name = "runGeneratorToolStripMenuItem";
-			this.runGeneratorToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.runGeneratorToolStripMenuItem.Text = "Run...";
-			// 
-			// generatorListBox
-			// 
-			this.generatorListBox.BackColor = System.Drawing.SystemColors.ControlLight;
-			this.generatorListBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.generatorListBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.generatorListBox.Name = "generatorListBox";
-			this.generatorListBox.Size = new System.Drawing.Size(121, 23);
-			// 
-			// executeGeneratorToolStripMenuItem
-			// 
-			this.executeGeneratorToolStripMenuItem.Name = "executeGeneratorToolStripMenuItem";
-			this.executeGeneratorToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-			this.executeGeneratorToolStripMenuItem.Text = "Execute";
-			this.executeGeneratorToolStripMenuItem.Click += new System.EventHandler(this.executeGeneratorToolStripMenuItem_Click);
-			// 
 			// MainWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -533,6 +542,7 @@
 		private System.Windows.Forms.ToolStripMenuItem runGeneratorToolStripMenuItem;
 		private System.Windows.Forms.ToolStripComboBox generatorListBox;
 		private System.Windows.Forms.ToolStripMenuItem executeGeneratorToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem exportRenderToolStripMenuItem;
 
 	}
 }
