@@ -21,9 +21,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Reflection;
 
+using LlewellynScripting;
 using LlewellynMedia;
 using LlewellynMath;
+using LlewellynMath.NoiseGenerators;
 
 namespace Fountain.Media
 {
@@ -134,6 +137,93 @@ namespace Fountain.Media
 			else throw new Exception("The supplied region did not lie within the height render.");
 		}
 
+		public static EffectCompileResult CompileEffect(CSScript script, out Effect effect, out string errors)
+		{
+			if (script != null)
+			{
+				script.RequiredTypes.Clear();
+				script.RequiredTypes.Add(typeof(Color));
+				script.RequiredTypes.Add(typeof(HeightField));
+				script.RequiredTypes.Add(typeof(Photon));
+				script.RequiredTypes.Add(typeof(Numerics));
+				script.RequiredTypes.Add(typeof(Math));
+				script.RequiredTypes.Add(typeof(PerlinNoise));
+
+				if (script.Compile(out errors))
+				{
+					MethodInfo applyInfo;
+					if (script.TryGetMember<MethodInfo>("Apply", out applyInfo))
+					{
+						try
+						{
+							effect = (HeightRender.Effect)applyInfo.CreateDelegate(typeof(HeightRender.Effect), script.ScriptObject);
+						}
+						catch
+						{
+							effect = null;
+							return EffectCompileResult.WrongApplySignature;
+						}
+					}
+					else
+					{
+						effect = null;
+						return EffectCompileResult.MissingApplyFunction;
+					}
+					return EffectCompileResult.Success;
+				}
+				else
+				{
+					effect = null;
+					return EffectCompileResult.SyntaxError;
+				}
+			}
+			else throw new Exception("The supplied script was null.");
+		}
+		public static GeneratorCompileResult CompileGenerator(CSScript script, out Generator generator, out string errors)
+		{
+			if (script != null)
+			{
+				script.RequiredTypes.Clear();
+				script.RequiredTypes.Add(typeof(HeightField));
+				script.RequiredTypes.Add(typeof(Numerics));
+				script.RequiredTypes.Add(typeof(Math));
+				script.RequiredTypes.Add(typeof(PerlinNoise));
+
+				if (script.Compile(out errors))
+				{
+					MethodInfo applyInfo;
+					if (script.TryGetMember<MethodInfo>("Generate", out applyInfo))
+					{
+						try
+						{
+							generator = (HeightRender.Generator)applyInfo.CreateDelegate(typeof(HeightRender.Generator), script.ScriptObject);
+						}
+						catch
+						{
+							generator = null;
+							return GeneratorCompileResult.WrongGenerateSignature;
+						}
+					}
+					else
+					{
+						generator = null;
+						return GeneratorCompileResult.MissingGenerateFunction;
+					}
+					return GeneratorCompileResult.Success;
+				}
+				else
+				{
+					generator = null;
+					return GeneratorCompileResult.SyntaxError;
+				}
+			}
+			else throw new Exception("The supplied script was null.");
+		}
+
+		public enum GeneratorCompileResult { Success, SyntaxError, MissingGenerateFunction, WrongGenerateSignature }
+		public enum EffectCompileResult { Success, SyntaxError, MissingApplyFunction, WrongApplySignature }
+
 		public delegate Photon Effect(int x, int y, Photon color, HeightField heightField);
+		public delegate double Generator(int x, int y, HeightField heightField);
 	}
 }

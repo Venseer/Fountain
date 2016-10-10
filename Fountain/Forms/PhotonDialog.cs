@@ -48,8 +48,9 @@ namespace Fountain.Forms
 			}
 		}
 
-		public PhotonDialog()
+		public PhotonDialog(Form owner)
 		{
+			Owner = owner;
 			CenterToParent();
 			InitializeComponent();
 		}

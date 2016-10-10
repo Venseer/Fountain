@@ -44,6 +44,7 @@
 			this.wrapYBox = new System.Windows.Forms.CheckBox();
 			this.wrapXBox = new System.Windows.Forms.CheckBox();
 			this.okButton = new System.Windows.Forms.Button();
+			this.cancelButton = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.widthBox)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.heightBox)).BeginInit();
 			this.groupBox1.SuspendLayout();
@@ -259,17 +260,30 @@
 			this.okButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.okButton.Location = new System.Drawing.Point(12, 288);
 			this.okButton.Name = "okButton";
-			this.okButton.Size = new System.Drawing.Size(234, 26);
+			this.okButton.Size = new System.Drawing.Size(111, 26);
 			this.okButton.TabIndex = 7;
 			this.okButton.Text = "OK";
 			this.okButton.UseVisualStyleBackColor = true;
 			this.okButton.Click += new System.EventHandler(this.okButton_Click);
 			// 
+			// cancelButton
+			// 
+			this.cancelButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.cancelButton.Location = new System.Drawing.Point(129, 288);
+			this.cancelButton.Name = "cancelButton";
+			this.cancelButton.Size = new System.Drawing.Size(117, 26);
+			this.cancelButton.TabIndex = 8;
+			this.cancelButton.Text = "Cancel";
+			this.cancelButton.UseVisualStyleBackColor = true;
+			this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+			// 
 			// RenderDialog
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(258, 320);
+			this.ClientSize = new System.Drawing.Size(258, 323);
+			this.ControlBox = false;
+			this.Controls.Add(this.cancelButton);
 			this.Controls.Add(this.okButton);
 			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.groupBox2);
@@ -310,5 +324,6 @@
 		private System.Windows.Forms.CheckBox wrapYBox;
 		private System.Windows.Forms.CheckBox wrapXBox;
 		private System.Windows.Forms.Button okButton;
+		private System.Windows.Forms.Button cancelButton;
 	}
 }

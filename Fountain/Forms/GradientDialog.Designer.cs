@@ -35,12 +35,12 @@
 			this.gradientTypeBox = new System.Windows.Forms.ComboBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.gradientRuler = new Fountain.Controls.Ruler();
-			this.gradientBox = new Fountain.Controls.GradientBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.minBox = new System.Windows.Forms.NumericUpDown();
 			this.label3 = new System.Windows.Forms.Label();
 			this.maxBox = new System.Windows.Forms.NumericUpDown();
+			this.gradientRuler = new Fountain.Controls.Ruler();
+			this.gradientBox = new Fountain.Controls.GradientBox();
 			((System.ComponentModel.ISupportInitialize)(this.minBox)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.maxBox)).BeginInit();
 			this.SuspendLayout();
@@ -97,37 +97,6 @@
 			// 
 			this.toolTip.UseAnimation = false;
 			this.toolTip.UseFading = false;
-			// 
-			// gradientRuler
-			// 
-			this.gradientRuler.BackColor = System.Drawing.SystemColors.Control;
-			this.gradientRuler.Horizontal = true;
-			this.gradientRuler.Location = new System.Drawing.Point(14, 14);
-			this.gradientRuler.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-			this.gradientRuler.Name = "gradientRuler";
-			this.gradientRuler.SegmentLineColor = System.Drawing.Color.Gray;
-			this.gradientRuler.SegmentLineWidth = 1F;
-			this.gradientRuler.Segments = 50;
-			this.gradientRuler.Size = new System.Drawing.Size(700, 15);
-			this.gradientRuler.TabIndex = 5;
-			this.toolTip.SetToolTip(this.gradientRuler, "Guide with increments every 5%.\r\nHold Shift to snap when dragging a node.");
-			this.gradientRuler.Vertical = false;
-			// 
-			// gradientBox
-			// 
-			this.gradientBox.BackgroundImage = global::Fountain.Properties.Resources.tile;
-			this.gradientBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.gradientBox.Gradient = null;
-			this.gradientBox.Location = new System.Drawing.Point(14, 30);
-			this.gradientBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-			this.gradientBox.Name = "gradientBox";
-			this.gradientBox.Resolution = 512;
-			this.gradientBox.Size = new System.Drawing.Size(700, 122);
-			this.gradientBox.TabIndex = 0;
-			this.toolTip.SetToolTip(this.gradientBox, "Left click to edit a node color.\r\nControl + Left Click to add a node.\r\nRight Clic" +
-        "k to delete a node.\r\nDrag with the Middle Mouse Button to move a node.");
-			this.gradientBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.gradientBox_MouseClick);
-			this.gradientBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.gradientBox_MouseMove);
 			// 
 			// label2
 			// 
@@ -201,11 +170,42 @@
             0});
 			this.maxBox.ValueChanged += new System.EventHandler(this.maxBox_ValueChanged);
 			// 
+			// gradientRuler
+			// 
+			this.gradientRuler.BackColor = System.Drawing.SystemColors.Control;
+			this.gradientRuler.Horizontal = true;
+			this.gradientRuler.Location = new System.Drawing.Point(14, 14);
+			this.gradientRuler.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.gradientRuler.Name = "gradientRuler";
+			this.gradientRuler.SegmentLineColor = System.Drawing.Color.Gray;
+			this.gradientRuler.SegmentLineWidth = 1F;
+			this.gradientRuler.Segments = 50;
+			this.gradientRuler.Size = new System.Drawing.Size(700, 15);
+			this.gradientRuler.TabIndex = 5;
+			this.toolTip.SetToolTip(this.gradientRuler, "Guide with increments every 5%.\r\nHold Shift to snap when dragging a node.");
+			this.gradientRuler.Vertical = false;
+			// 
+			// gradientBox
+			// 
+			this.gradientBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.gradientBox.Gradient = null;
+			this.gradientBox.Location = new System.Drawing.Point(14, 30);
+			this.gradientBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.gradientBox.Name = "gradientBox";
+			this.gradientBox.Resolution = 512;
+			this.gradientBox.Size = new System.Drawing.Size(700, 122);
+			this.gradientBox.TabIndex = 0;
+			this.toolTip.SetToolTip(this.gradientBox, "Left click to edit a node color.\r\nControl + Left Click to add a node.\r\nRight Clic" +
+        "k to delete a node.\r\nDrag with the Middle Mouse Button to move a node.");
+			this.gradientBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.gradientBox_MouseClick);
+			this.gradientBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.gradientBox_MouseMove);
+			// 
 			// GradientDialog
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(727, 234);
+			this.ControlBox = false;
 			this.Controls.Add(this.maxBox);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.minBox);

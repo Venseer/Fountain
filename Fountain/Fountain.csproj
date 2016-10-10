@@ -99,35 +99,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\PhotonPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\PhotonPanel.Designer.cs">
-      <DependentUpon>PhotonPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\GradientBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\GradientBox.Designer.cs">
-      <DependentUpon>GradientBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\RenderArea.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\RenderArea.Designer.cs">
-      <DependentUpon>RenderArea.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Ruler.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\Ruler.Designer.cs">
-      <DependentUpon>Ruler.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\BrushDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\BrushDialog.Designer.cs">
       <DependentUpon>BrushDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\GeneratorDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GeneratorDialog.Designer.cs">
+      <DependentUpon>GeneratorDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\EffectDialog.cs">
       <SubType>Form</SubType>
@@ -160,6 +142,12 @@
       <DependentUpon>RenderDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Document.cs" />
+    <Compile Include="Forms\TextEntryDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TextEntryDialog.Designer.cs">
+      <DependentUpon>TextEntryDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Media\HeightBrush.cs" />
     <Compile Include="Media\HeightRender.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -168,20 +156,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Controls\GradientBox.resx">
-      <DependentUpon>GradientBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\PhotonPanel.resx">
-      <DependentUpon>PhotonPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\RenderArea.resx">
-      <DependentUpon>RenderArea.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Ruler.resx">
-      <DependentUpon>Ruler.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\BrushDialog.resx">
       <DependentUpon>BrushDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GeneratorDialog.resx">
+      <DependentUpon>GeneratorDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\EffectDialog.resx">
       <DependentUpon>EffectDialog.cs</DependentUpon>
@@ -200,6 +179,9 @@
     <EmbeddedResource Include="Forms\RenderDialog.resx">
       <DependentUpon>RenderDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TextEntryDialog.resx">
+      <DependentUpon>TextEntryDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -212,7 +194,6 @@
   <ItemGroup>
     <Content Include="fountain.ico" />
     <Content Include="Resources\fountain.ico" />
-    <None Include="Resources\tile.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
@@ -230,6 +211,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FountainControls\FountainControls.csproj">
+      <Project>{be885c73-f9ef-4b71-bcce-56fd16d1668d}</Project>
+      <Name>FountainControls</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -34,7 +34,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.BackgroundImage = global::Fountain.Properties.Resources.tile;
+			this.BackgroundImage = global::FountainControls.Properties.Resources.tile;
 			this.Name = "RenderArea";
 			this.ResumeLayout(false);
 

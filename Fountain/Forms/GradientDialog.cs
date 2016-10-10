@@ -30,107 +30,131 @@ namespace Fountain.Forms
 {
 	public partial class GradientDialog : Form
 	{
-		public PhotonGradient Gradient
+		private string gradientName;
+		private PhotonGradient copy;
+
+		public GradientDialog(string gradientName, Form owner)
 		{
-			get
+			Owner = owner;
+			if (gradientName != null && gradientName.Length > 0)
 			{
-				return gradientBox.Gradient;
-			}
-			set
-			{
-				if (value != null)
+				CenterToParent();
+				InitializeComponent();
+				gradientTypeBox.DataSource = Enum.GetValues(typeof(PhotonInterpolationMode));
+
+				if (Document.ContainsGradient(this.gradientName = gradientName))
 				{
-					gradientBox.Gradient = value;
-					gradientTypeBox.SelectedItem = value.Mode;
-					minBox.Value = (decimal)value.Start;
-					maxBox.Value = (decimal)(value.Length - value.Start);
+					gradientBox.Gradient = Document.GetGradient(gradientName);
 				}
-				else throw new Exception("The supplied gradient cannot be null.");
+				else
+				{
+					PhotonGradient pg = new PhotonGradient(PhotonInterpolationMode.Linear);
+					pg.Add(new Photon(0.0f, 0.0f, 0.0f), 0.0f);
+					pg.Add(new Photon(1.0f, 1.0f, 1.0f), 1.0f);
+					Document.SetGradient(gradientName, gradientBox.Gradient = pg);
+				}
+
+				copy = gradientBox.Gradient.MakeCopy();
+
+				gradientTypeBox.SelectedItem = gradientBox.Gradient.Mode;
+				minBox.Value = (decimal)gradientBox.Gradient.Start;
+				maxBox.Value = (decimal)(gradientBox.Gradient.Length - gradientBox.Gradient.Start);
+
+				Document.Cleared += Document_Cleared;
+				Document.Loaded += Document_Loaded;
+				Document.GradientRemoved += Document_GradientRemoved;
 			}
+			else throw new Exception("The supplied name was empty or null.");
 		}
 
-		public GradientDialog(PhotonGradient gradient)
+		private void Document_GradientRemoved(string name, PhotonGradient gradient)
 		{
-			CenterToParent();
-			InitializeComponent();
-			gradientTypeBox.DataSource = Enum.GetValues(typeof(PhotonInterpolationMode));
-			Gradient = gradient;
+			if (name == gradientName) Close();
+		}
+		private void Document_Loaded(string path)
+		{
+			Close();
+		}
+		private void Document_Cleared()
+		{
+			Close();
 		}
 
 		private void okButton_Click(object sender, EventArgs e)
 		{
 			DialogResult = DialogResult.OK;
+			Close();
 		}
 		private void cancelButton_Click(object sender, EventArgs e)
 		{
+			Document.SetGradient(gradientName, copy);
 			DialogResult = DialogResult.Cancel;
+			Close();
 		}
 		private void gradientTypeBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (Gradient != null)
+			if (gradientBox.Gradient != null)
 			{
-				Gradient.Mode = (PhotonInterpolationMode)gradientTypeBox.SelectedItem;
+				gradientBox.Gradient.Mode = (PhotonInterpolationMode)gradientTypeBox.SelectedItem;
 				gradientBox.UpdateRender();
 			}
 		}
 		private void gradientBox_MouseClick(object sender, MouseEventArgs e)
 		{
-			if (Gradient != null)
+			PhotonGradient gradient = gradientBox.Gradient;
+
+			float u = (float)e.X / gradientBox.Width * gradient.Length + gradient.Start;
+			int i = gradient.ClosestIndex(u);
+			if (e.Button == MouseButtons.Left)
 			{
-				float u = (float)e.X / gradientBox.Width * Gradient.Length + Gradient.Start;
-				int i = Gradient.ClosestIndex(u);
-				if (e.Button == MouseButtons.Left)
+				PhotonGradient.PhotonPosition pp = gradient[i];
+				if (ModifierKeys == Keys.Control)
 				{
-					PhotonGradient.PhotonPosition pp = Gradient[i];
-					if (ModifierKeys == Keys.Control)
-					{
-						pp.Photon = Gradient[u];
-						pp.Position = u;
-						Gradient.Add(pp);
-						gradientBox.UpdateRender();
-					}
-					else
-					{
-						PhotonDialog photonDialog = new PhotonDialog();
-						photonDialog.Photon = pp.Photon;
-						if (photonDialog.ShowDialog() == DialogResult.OK)
-						{
-							pp.Photon = photonDialog.Photon;
-							Gradient[i] = pp;
-							gradientBox.UpdateRender();
-						}
-					}
-				}
-				else if (e.Button == MouseButtons.Right && i > 0 && i < Gradient.PhotonPositionCount - 1)
-				{
-					Gradient.Remove(i);
+					pp.Photon = gradient[u];
+					pp.Position = u;
+					gradient.Add(pp);
 					gradientBox.UpdateRender();
 				}
+				else
+				{
+					PhotonDialog photonDialog = new PhotonDialog(this);
+					photonDialog.Photon = pp.Photon;
+					if (photonDialog.ShowDialog() == DialogResult.OK)
+					{
+						pp.Photon = photonDialog.Photon;
+						gradient[i] = pp;
+						gradientBox.UpdateRender();
+					}
+				}
+			}
+			else if (e.Button == MouseButtons.Right && i > 0 && i < gradient.PhotonPositionCount - 1)
+			{
+				gradient.Remove(i);
+				gradientBox.UpdateRender();
 			}
 		}
 		private void gradientBox_MouseMove(object sender, MouseEventArgs e)
 		{
-			if (Gradient != null)
+			PhotonGradient gradient = gradientBox.Gradient;
+
+			float u = (float)e.X / gradientBox.Width * gradient.Length + gradient.Start;
+			int i = gradient.ClosestIndex(u);
+			if (e.Button == MouseButtons.Middle && i > 0 && i < gradient.PhotonPositionCount - 1)
 			{
-				float u = (float)e.X / gradientBox.Width * Gradient.Length + Gradient.Start;
-				int i = Gradient.ClosestIndex(u);
-				if (e.Button == MouseButtons.Middle && i > 0 && i < Gradient.PhotonPositionCount - 1)
-				{
-					PhotonGradient.PhotonPosition pp = Gradient[i];
-					if (ModifierKeys == Keys.Shift) pp.Position = (float)(int)(Math.Round(u * gradientRuler.Segments)) / gradientRuler.Segments;
-					else pp.Position = u;
-					Gradient[i] = pp;
-					gradientBox.UpdateRender();
-				}
+				PhotonGradient.PhotonPosition pp = gradient[i];
+				if (ModifierKeys == Keys.Shift) pp.Position = (float)(int)(Math.Round(u * gradientRuler.Segments)) / gradientRuler.Segments;
+				else pp.Position = u;
+				gradient[i] = pp;
+				gradientBox.UpdateRender();
 			}
 		}
 		private void minBox_ValueChanged(object sender, EventArgs e)
 		{
-			Gradient.Normalize((float)minBox.Value, (float)maxBox.Value);
+			gradientBox.Gradient.Normalize((float)minBox.Value, (float)maxBox.Value);
 		}
 		private void maxBox_ValueChanged(object sender, EventArgs e)
 		{
-			Gradient.Normalize((float)minBox.Value, (float)maxBox.Value);
+			gradientBox.Gradient.Normalize((float)minBox.Value, (float)maxBox.Value);
 		}
 	}
 }

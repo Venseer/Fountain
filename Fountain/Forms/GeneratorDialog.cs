@@ -32,24 +32,24 @@ using Fountain.Media;
 
 namespace Fountain.Forms
 {
-	public partial class EffectDialog : Form
+	public partial class GeneratorDialog : Form
 	{
-		public string EffectName
+		public string GeneratorName
 		{
 			get
 			{
-				return (string)effectNameBox.SelectedItem;
+				return (string)generatorNameBox.SelectedItem;
 			}
 			set
 			{
 				RefreshNameList();
-				effectNameBox.SelectedItem = value;
+				generatorNameBox.SelectedItem = value;
 				RefreshInfo();
 			}
 		}
 		private CSScript script;
 
-		public EffectDialog(Form owner)
+		public GeneratorDialog(Form owner)
 		{
 			Owner = owner;
 			CenterToParent();
@@ -58,26 +58,26 @@ namespace Fountain.Forms
 			RefreshInfo();
 			RefreshNameList();
 
-			Document.EffectSet += Document_EffectSet;
-			Document.EffectRemoved += Document_EffectRemoved;
+			Document.GeneratorSet += Document_GeneratorSet;
+			Document.GeneratorRemoved += Document_GeneratorRemoved;
 			Document.Loaded += Document_Loaded;
 			Document.Cleared += Document_Cleared;
 		}
 
 		private void RefreshNameList()
 		{
-			effectNameBox.Items.Clear();
-			foreach (string name in Document.EffectNames)
-				effectNameBox.Items.Add(name);
+			generatorNameBox.Items.Clear();
+			foreach (string name in Document.GeneratorNames)
+				generatorNameBox.Items.Add(name);
 		}
 		private void RefreshInfo()
 		{
-			if (Document.ContainsEffect(EffectName))
+			if (Document.ContainsGenerator(GeneratorName))
 			{
 				//Fields
-				script = Document.GetEffectScript(EffectName);
+				script = Document.GetGeneratorScript(GeneratorName);
 				//Control Values
-				Text = "Effect - " + EffectName;
+				Text = "Generator - " + GeneratorName;
 				scriptBox.Text = script.Source;
 				//Enable Controls
 				deleteButton.Enabled = true;
@@ -89,7 +89,7 @@ namespace Fountain.Forms
 				//Fields
 				script = null;
 				//Control Values
-				Text = "Effects";
+				Text = "Generators";
 				scriptBox.Text = null;
 				//Disable Controls
 				deleteButton.Enabled = false;
@@ -98,14 +98,14 @@ namespace Fountain.Forms
 			}
 		}
 
-		private void Document_EffectRemoved(string name, Media.HeightRender.Effect effect)
+		private void Document_GeneratorSet(string name, HeightRender.Generator generator)
+		{
+			GeneratorName = name;
+		}
+		private void Document_GeneratorRemoved(string name, HeightRender.Generator generator)
 		{
 			RefreshNameList();
 			RefreshInfo();
-		}
-		private void Document_EffectSet(string name, HeightRender.Effect effect)
-		{
-			EffectName = name;
 		}
 		private void Document_Loaded(string path)
 		{
@@ -119,21 +119,21 @@ namespace Fountain.Forms
 		private void compileButton_Click(object sender, EventArgs e)
 		{
 			script.Source = scriptBox.Text;
-			HeightRender.Effect effect;
+			HeightRender.Generator generator;
 			string errors;
-			switch (HeightRender.CompileEffect(script, out effect, out errors))
+			switch (HeightRender.CompileGenerator(script, out generator, out errors))
 			{
-				case HeightRender.EffectCompileResult.WrongApplySignature:
-					MessageBox.Show("The method signature for the \"Apply\" function should be:\n\nPhoton Apply(int x, int y, Photon color, HeightField heightField)", "Script Error");
+				case HeightRender.GeneratorCompileResult.WrongGenerateSignature:
+					MessageBox.Show("The method signature for the \"Generate\" function should be:\n\nfloat Generate(int x, int y, HeightField heightField)", "Script Error");
 					break;
-				case HeightRender.EffectCompileResult.MissingApplyFunction:
-					MessageBox.Show("The \"Apply\" function is missing from your script.", "Script Error");
+				case HeightRender.GeneratorCompileResult.MissingGenerateFunction:
+					MessageBox.Show("The \"Generate\" function is missing from your script.", "Script Error");
 					break;
-				case HeightRender.EffectCompileResult.SyntaxError:
+				case HeightRender.GeneratorCompileResult.SyntaxError:
 					MessageBox.Show("There was a compilation error in your script:\r\n" + errors, "Script Error");
 					break;
-				case HeightRender.EffectCompileResult.Success:
-					Document.SetEffect(EffectName, effect, script);
+				case HeightRender.GeneratorCompileResult.Success:
+					Document.SetGenerator(GeneratorName, generator, script);
 					break;
 			}
 		}
@@ -154,25 +154,20 @@ namespace Fountain.Forms
 		}
 		private void deleteButton_Click(object sender, EventArgs e)
 		{
-			if (MessageBox.Show("Are you sure you want to delete this effect?", "Delete Effect", MessageBoxButtons.OKCancel) == DialogResult.OK)
-				Document.RemoveEffect(EffectName);
+			if (MessageBox.Show("Are you sure you want to delete this generator?", "Delete Generator", MessageBoxButtons.OKCancel) == DialogResult.OK)
+				Document.RemoveGenerator(GeneratorName);
 		}
-		private void EffectDialog_FormClosing(object sender, FormClosingEventArgs e)
+		private void generatorNameBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			RefreshInfo();
+		}
+		private void GeneratorDialog_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			if (e.CloseReason == CloseReason.UserClosing)
 			{
 				e.Cancel = true;
 				Hide();
 			}
-		}
-		private void effectNameBox_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			RefreshInfo();
-		}
-		private void addButton_Click(object sender, EventArgs e)
-		{
-			if (Document.ContainsEffect(EffectName))
-				Document.SelectEffect(EffectName);
 		}
 	}
 }

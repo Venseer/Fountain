@@ -82,29 +82,34 @@ namespace Fountain.Forms
 			}
 		}
 
-		public RenderDialog(string renderName)
+		public RenderDialog(string renderName, Form owner)
 		{
-			CenterToParent();
-			InitializeComponent();
+			Owner = owner;
+			if (renderName != null && renderName.Length > 0)
+			{
+				CenterToParent();
+				InitializeComponent();
 
-			Text = "Render - " + renderName;
-			if (Document.ContainsRender(this.renderName = renderName) && (render = Document.GetRender(renderName)) != null)
-			{
-				widthBox.Value = render.HeightField.Width;
-				widthBox.Enabled = false;
-				heightBox.Value = render.HeightField.Height;
-				heightBox.Enabled = false;
-				clampBox.Checked = render.HeightField.Clamp;
-				clampMinBox.Value = (decimal)render.HeightField.ClampMin;
-				clampMaxBox.Value = (decimal)render.HeightField.ClampMax;
-				wrapXBox.Checked = render.HeightField.WrapX;
-				wrapYBox.Checked = render.HeightField.WrapY;
+				Text = "Render - " + renderName;
+				if (Document.ContainsRender(this.renderName = renderName) && (render = Document.GetRender(renderName)) != null)
+				{
+					widthBox.Value = render.HeightField.Width;
+					widthBox.Enabled = false;
+					heightBox.Value = render.HeightField.Height;
+					heightBox.Enabled = false;
+					clampBox.Checked = render.HeightField.Clamp;
+					clampMinBox.Value = (decimal)render.HeightField.ClampMin;
+					clampMaxBox.Value = (decimal)render.HeightField.ClampMax;
+					wrapXBox.Checked = render.HeightField.WrapX;
+					wrapYBox.Checked = render.HeightField.WrapY;
+				}
+				else
+				{
+					widthBox.Enabled = true;
+					heightBox.Enabled = true;
+				}
 			}
-			else
-			{
-				widthBox.Enabled = true;
-				heightBox.Enabled = true;
-			}
+			else throw new Exception("The supplied name was empty or null.");
 		}
 
 		private void widthBox_ValueChanged(object sender, EventArgs e)
@@ -138,6 +143,11 @@ namespace Fountain.Forms
 		private void okButton_Click(object sender, EventArgs e)
 		{
 			DialogResult = DialogResult.OK;
+			Close();
+		}
+		private void cancelButton_Click(object sender, EventArgs e)
+		{
+			DialogResult = DialogResult.Cancel;
 			Close();
 		}
 	}

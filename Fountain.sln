@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 2012 for Windows Desktop
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fountain", "Fountain\Fountain.csproj", "{004DC2C3-6FF0-40AE-ACD8-7BCA7283F7F1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FountainControls", "FountainControls\FountainControls.csproj", "{BE885C73-F9EF-4B71-BCCE-56FD16D1668D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,12 @@ Global
 		{004DC2C3-6FF0-40AE-ACD8-7BCA7283F7F1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{004DC2C3-6FF0-40AE-ACD8-7BCA7283F7F1}.Release|x64.ActiveCfg = Release|x64
 		{004DC2C3-6FF0-40AE-ACD8-7BCA7283F7F1}.Release|x64.Build.0 = Release|x64
+		{BE885C73-F9EF-4B71-BCCE-56FD16D1668D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE885C73-F9EF-4B71-BCCE-56FD16D1668D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE885C73-F9EF-4B71-BCCE-56FD16D1668D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BE885C73-F9EF-4B71-BCCE-56FD16D1668D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE885C73-F9EF-4B71-BCCE-56FD16D1668D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE885C73-F9EF-4B71-BCCE-56FD16D1668D}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

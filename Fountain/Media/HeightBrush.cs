@@ -22,6 +22,9 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Reflection;
 
+using LlewellynScripting;
+using LlewellynMath;
+using LlewellynMath.NoiseGenerators;
 using LlewellynMath;
 
 namespace Fountain.Media
@@ -113,9 +116,10 @@ namespace Fountain.Media
 			Blend = blend;
 		}
 
-		public void Paint(HeightField field, int x, int y, float intensity, out FieldSelection brushArea)
+		public void Paint(HeightField field, int x, int y, float intensity, out FieldSelection brushArea, out float[] previousData)
 		{
-			brushArea = new FieldSelection(x - Width / 2 - Width % 2, y - Height / 2 - Height % 2, Width, Height);
+			brushArea = new FieldSelection(x - width / 2 - width % 2, y - height / 2 - height % 2, width, height);
+			previousData = new float[width * height];
 			if (sample != null && blend != null)
 			{
 				for (int _x = brushArea.Left; _x < brushArea.Right; _x++)
@@ -125,15 +129,82 @@ namespace Fountain.Media
 						float data;
 						if (field.TryGetHeight(_x, _y, out data))
 						{
-							float shape = sample(_x, _y, intensity * Power, brushArea.Left, brushArea.Right, brushArea.Top, brushArea.Bottom);
-							field[_x, _y] = blend(data, shape);
+							previousData[(_y - brushArea.Top) * width + (_x - brushArea.Left)] = data;
+							double shape = sample(_x, _y, intensity * Power, brushArea.Left, brushArea.Right, brushArea.Top, brushArea.Bottom);
+							field[_x, _y] = (float)blend(data, shape);
 						}
 					}
 				}
 			}
 		}
 
-		public delegate float SampleFunction(int x, int y, float intensity, int left, int right, int top, int bottom);
-		public delegate float BlendFunction(float baseValue, float newValue);
+		public static CompileResult CompileFunctions(CSScript script, out SampleFunction sample, out BlendFunction blend, out string errors)
+		{
+			if (script != null)
+			{
+				script.RequiredTypes.Clear();
+				script.RequiredTypes.Add(typeof(Math));
+				script.RequiredTypes.Add(typeof(Numerics));
+				script.RequiredTypes.Add(typeof(PerlinNoise));
+
+				if (script.Compile(out errors))
+				{
+					MethodInfo sampleInfo;
+					if (script.TryGetMember<MethodInfo>("Sample", out sampleInfo))
+					{
+						try
+						{
+							sample = (HeightBrush.SampleFunction)sampleInfo.CreateDelegate(typeof(HeightBrush.SampleFunction), script.ScriptObject);
+						}
+						catch
+						{
+							sample = null;
+							blend = null;
+							return CompileResult.WrongSampleSignature;
+						}
+					}
+					else
+					{
+						sample = null;
+						blend = null;
+						return CompileResult.MissingSampleFunction;
+					}
+
+					MethodInfo blendInfo;
+					if (script.TryGetMember<MethodInfo>("Blend", out blendInfo))
+					{
+						try
+						{
+							blend = (HeightBrush.BlendFunction)blendInfo.CreateDelegate(typeof(HeightBrush.BlendFunction), script.ScriptObject);
+						}
+						catch
+						{
+							sample = null;
+							blend = null;
+							return CompileResult.WrongBlendSignature;
+						}
+					}
+					else
+					{
+						sample = null;
+						blend = null;
+						return CompileResult.MissingBlendFunction;
+					}
+					return CompileResult.Success;
+				}
+				else
+				{
+					sample = null;
+					blend = null;
+					return CompileResult.SyntaxError;
+				}
+			}
+			else throw new Exception("The supplied script was null.");
+		}
+
+		public enum CompileResult { Success, SyntaxError, MissingBlendFunction, MissingSampleFunction, WrongSampleSignature, WrongBlendSignature }
+
+		public delegate double SampleFunction(int x, int y, double intensity, int left, int right, int top, int bottom);
+		public delegate double BlendFunction(double baseValue, double newValue);
 	}
 }
