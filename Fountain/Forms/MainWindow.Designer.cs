@@ -42,6 +42,7 @@
 			this.newRenderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.editRenderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.exportRenderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.updateRenderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.gradientsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.newGradientToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.editGradientToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -62,7 +63,6 @@
 			this.rightBrushNameBox = new System.Windows.Forms.ComboBox();
 			this.leftBrushNameBox = new System.Windows.Forms.ComboBox();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-			this.renderArea = new Fountain.Controls.RenderArea();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.selectedGradientBox = new System.Windows.Forms.ComboBox();
@@ -72,8 +72,9 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
 			this.selectedRenderBox = new System.Windows.Forms.ComboBox();
-			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-			this.updateRenderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.deleteRenderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.renderArea = new Fountain.Controls.RenderArea();
+			this.deleteGradientToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
@@ -151,9 +152,9 @@
 			this.rendersToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newRenderToolStripMenuItem,
             this.editRenderToolStripMenuItem,
+            this.updateRenderToolStripMenuItem,
             this.exportRenderToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.updateRenderToolStripMenuItem});
+            this.deleteRenderToolStripMenuItem});
 			this.rendersToolStripMenuItem.Name = "rendersToolStripMenuItem";
 			this.rendersToolStripMenuItem.Size = new System.Drawing.Size(75, 20);
 			this.rendersToolStripMenuItem.Text = "Renders";
@@ -180,11 +181,20 @@
 			this.exportRenderToolStripMenuItem.Text = "Export";
 			this.exportRenderToolStripMenuItem.Click += new System.EventHandler(this.exportRenderToolStripMenuItem_Click);
 			// 
+			// updateRenderToolStripMenuItem
+			// 
+			this.updateRenderToolStripMenuItem.Name = "updateRenderToolStripMenuItem";
+			this.updateRenderToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
+			this.updateRenderToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+			this.updateRenderToolStripMenuItem.Text = "Update";
+			this.updateRenderToolStripMenuItem.Click += new System.EventHandler(this.updateRenderToolStripMenuItem_Click);
+			// 
 			// gradientsToolStripMenuItem
 			// 
 			this.gradientsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newGradientToolStripMenuItem,
-            this.editGradientToolStripMenuItem});
+            this.editGradientToolStripMenuItem,
+            this.deleteGradientToolStripMenuItem});
 			this.gradientsToolStripMenuItem.Name = "gradientsToolStripMenuItem";
 			this.gradientsToolStripMenuItem.Size = new System.Drawing.Size(91, 20);
 			this.gradientsToolStripMenuItem.Text = "Gradients";
@@ -361,19 +371,6 @@
 			this.splitContainer1.SplitterDistance = 816;
 			this.splitContainer1.TabIndex = 3;
 			// 
-			// renderArea
-			// 
-			this.renderArea.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("renderArea.BackgroundImage")));
-			this.renderArea.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.renderArea.Image = null;
-			this.renderArea.Location = new System.Drawing.Point(0, 0);
-			this.renderArea.Name = "renderArea";
-			this.renderArea.OverlayThickness = 1F;
-			this.renderArea.Size = new System.Drawing.Size(816, 483);
-			this.renderArea.TabIndex = 0;
-			this.renderArea.KeyDown += new System.Windows.Forms.KeyEventHandler(this.renderArea_KeyDown);
-			this.renderArea.KeyUp += new System.Windows.Forms.KeyEventHandler(this.renderArea_KeyUp);
-			// 
 			// groupBox2
 			// 
 			this.groupBox2.Controls.Add(this.selectedEffectList);
@@ -475,18 +472,32 @@
 			this.selectedRenderBox.TabIndex = 0;
 			this.selectedRenderBox.SelectedIndexChanged += new System.EventHandler(this.selectedRenderBox_SelectedIndexChanged);
 			// 
-			// toolStripSeparator1
+			// deleteRenderToolStripMenuItem
 			// 
-			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(158, 6);
+			this.deleteRenderToolStripMenuItem.Name = "deleteRenderToolStripMenuItem";
+			this.deleteRenderToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+			this.deleteRenderToolStripMenuItem.Text = "Delete";
+			this.deleteRenderToolStripMenuItem.Click += new System.EventHandler(this.deleteRenderToolStripMenuItem_Click);
 			// 
-			// updateRenderToolStripMenuItem
+			// renderArea
 			// 
-			this.updateRenderToolStripMenuItem.Name = "updateRenderToolStripMenuItem";
-			this.updateRenderToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.updateRenderToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-			this.updateRenderToolStripMenuItem.Text = "Update";
-			this.updateRenderToolStripMenuItem.Click += new System.EventHandler(this.updateRenderToolStripMenuItem_Click);
+			this.renderArea.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("renderArea.BackgroundImage")));
+			this.renderArea.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.renderArea.Image = null;
+			this.renderArea.Location = new System.Drawing.Point(0, 0);
+			this.renderArea.Name = "renderArea";
+			this.renderArea.OverlayThickness = 1F;
+			this.renderArea.Size = new System.Drawing.Size(816, 483);
+			this.renderArea.TabIndex = 0;
+			this.renderArea.KeyDown += new System.Windows.Forms.KeyEventHandler(this.renderArea_KeyDown);
+			this.renderArea.KeyUp += new System.Windows.Forms.KeyEventHandler(this.renderArea_KeyUp);
+			// 
+			// deleteGradientToolStripMenuItem
+			// 
+			this.deleteGradientToolStripMenuItem.Name = "deleteGradientToolStripMenuItem";
+			this.deleteGradientToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+			this.deleteGradientToolStripMenuItem.Text = "Delete";
+			this.deleteGradientToolStripMenuItem.Click += new System.EventHandler(this.deleteGradientToolStripMenuItem_Click);
 			// 
 			// MainWindow
 			// 
@@ -560,8 +571,9 @@
 		private System.Windows.Forms.ToolStripComboBox generatorListBox;
 		private System.Windows.Forms.ToolStripMenuItem executeGeneratorToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem exportRenderToolStripMenuItem;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripMenuItem updateRenderToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem deleteRenderToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem deleteGradientToolStripMenuItem;
 
 	}
 }

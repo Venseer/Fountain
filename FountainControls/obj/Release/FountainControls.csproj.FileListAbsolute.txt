@@ -1,0 +1,15 @@
+C:\Users\Evan\Desktop\Work\Visual Studio\Fountain\FountainControls\obj\Release\Fountain.Controls.GradientBox.resources
+C:\Users\Evan\Desktop\Work\Visual Studio\Fountain\FountainControls\obj\Release\Fountain.Controls.PhotonPanel.resources
+C:\Users\Evan\Desktop\Work\Visual Studio\Fountain\FountainControls\obj\Release\Fountain.Controls.RenderArea.resources
+C:\Users\Evan\Desktop\Work\Visual Studio\Fountain\FountainControls\obj\Release\Fountain.Controls.Ruler.resources
+C:\Users\Evan\Desktop\Work\Visual Studio\Fountain\FountainControls\obj\Release\FountainControls.csproj.GenerateResource.Cache
+C:\Users\Evan\Desktop\Work\Visual Studio\Fountain\FountainControls\bin\Release\FountainControls.dll.config
+C:\Users\Evan\Desktop\Work\Visual Studio\Fountain\FountainControls\bin\Release\FountainControls.dll
+C:\Users\Evan\Desktop\Work\Visual Studio\Fountain\FountainControls\bin\Release\FountainControls.pdb
+C:\Users\Evan\Desktop\Work\Visual Studio\Fountain\FountainControls\bin\Release\LlewellynMath.dll
+C:\Users\Evan\Desktop\Work\Visual Studio\Fountain\FountainControls\bin\Release\LlewellynMedia.dll
+C:\Users\Evan\Desktop\Work\Visual Studio\Fountain\FountainControls\bin\Release\LlewellynMath.pdb
+C:\Users\Evan\Desktop\Work\Visual Studio\Fountain\FountainControls\bin\Release\LlewellynMedia.pdb
+C:\Users\Evan\Desktop\Work\Visual Studio\Fountain\FountainControls\obj\Release\FountainControls.dll
+C:\Users\Evan\Desktop\Work\Visual Studio\Fountain\FountainControls\obj\Release\FountainControls.pdb
+C:\Users\Evan\Desktop\Work\Visual Studio\Fountain\FountainControls\obj\Release\FountainControls.Properties.Resources.resources
