@@ -72,6 +72,8 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
 			this.selectedRenderBox = new System.Windows.Forms.ComboBox();
+			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.updateRenderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
@@ -149,7 +151,9 @@
 			this.rendersToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newRenderToolStripMenuItem,
             this.editRenderToolStripMenuItem,
-            this.exportRenderToolStripMenuItem});
+            this.exportRenderToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.updateRenderToolStripMenuItem});
 			this.rendersToolStripMenuItem.Name = "rendersToolStripMenuItem";
 			this.rendersToolStripMenuItem.Size = new System.Drawing.Size(75, 20);
 			this.rendersToolStripMenuItem.Text = "Renders";
@@ -471,6 +475,19 @@
 			this.selectedRenderBox.TabIndex = 0;
 			this.selectedRenderBox.SelectedIndexChanged += new System.EventHandler(this.selectedRenderBox_SelectedIndexChanged);
 			// 
+			// toolStripSeparator1
+			// 
+			this.toolStripSeparator1.Name = "toolStripSeparator1";
+			this.toolStripSeparator1.Size = new System.Drawing.Size(158, 6);
+			// 
+			// updateRenderToolStripMenuItem
+			// 
+			this.updateRenderToolStripMenuItem.Name = "updateRenderToolStripMenuItem";
+			this.updateRenderToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
+			this.updateRenderToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+			this.updateRenderToolStripMenuItem.Text = "Update";
+			this.updateRenderToolStripMenuItem.Click += new System.EventHandler(this.updateRenderToolStripMenuItem_Click);
+			// 
 			// MainWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -543,6 +560,8 @@
 		private System.Windows.Forms.ToolStripComboBox generatorListBox;
 		private System.Windows.Forms.ToolStripMenuItem executeGeneratorToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem exportRenderToolStripMenuItem;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+		private System.Windows.Forms.ToolStripMenuItem updateRenderToolStripMenuItem;
 
 	}
 }

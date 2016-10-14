@@ -412,6 +412,14 @@ namespace Fountain.Forms
 			Document.SelectedRender.UpdateAll(Document.SelectedGradient, Document.SelectedEffects);
 			renderArea.Invalidate();
 		}
+		private void updateRenderToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (Document.SelectedRender != null)
+			{
+				Document.SelectedRender.UpdateAll(Document.SelectedGradient, Document.SelectedEffects);
+				renderArea.Invalidate();
+			}
+		}
 		//Gradients
 		private void newGradientToolStripMenuItem_Click(object sender, EventArgs e)
 		{
