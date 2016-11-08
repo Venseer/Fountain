@@ -412,6 +412,21 @@ namespace Fountain.Forms
 			Document.SelectedRender.UpdateAll(Document.SelectedGradient, Document.SelectedEffects);
 			renderArea.Invalidate();
 		}
+		private void updateRenderToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (Document.SelectedRender != null)
+			{
+				Document.SelectedRender.UpdateAll(Document.SelectedGradient, Document.SelectedEffects);
+				renderArea.Invalidate();
+			}
+		}
+		private void deleteRenderToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (Document.SelectedRender != null && MessageBox.Show(string.Format("Are you sure you want to delete {0}? You cannot undo this action.", Document.SelectedRenderName), "Delete Render", MessageBoxButtons.YesNo) == DialogResult.Yes)
+			{
+				Document.RemoveRender(Document.SelectedRenderName);
+			}
+		}
 		//Gradients
 		private void newGradientToolStripMenuItem_Click(object sender, EventArgs e)
 		{
@@ -447,6 +462,13 @@ namespace Fountain.Forms
 		private void selectedGradientBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			Document.SelectedGradientName = selectedGradientBox.Text;
+		}
+		private void deleteGradientToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (Document.SelectedGradient != null && MessageBox.Show(string.Format("Are you sure you want to delete {0}? You cannot undo this action.", Document.SelectedGradientName), "Delete Gradient", MessageBoxButtons.YesNo) == DialogResult.Yes)
+			{
+				Document.RemoveGradient(Document.SelectedGradientName);
+			}
 		}
 		//Effects
 		private void newEffectToolStripMenuItem_Click(object sender, EventArgs e)
